@@ -25,12 +25,12 @@ namespace iQQ.Net.WebQQCore.Im
         /// <summary>
         /// 构造方法，初始化模块和服务
         /// </summary>
-        /// <param name="username">账号(二维码登录留空)</param>
-        /// <param name="password">密码(二维码登录留空)</param>
+        ///// <param name="username">账号(二维码登录留空)</param>
+        ///// <param name="password">密码(二维码登录留空)</param>
         /// <param name="notifyListener">监听器</param>
         /// <param name="actorDispatcher">线程执行器</param>
         /// <param name="logger">日志记录器</param>
-        public WebQQClient(string username = null, string password = null, QQNotifyListener notifyListener = null, 
+        public WebQQClient( QQNotifyListener notifyListener = null, 
             IQQActorDispatcher actorDispatcher = null, IQQLogger logger = null)
         {
             _modules = new Dictionary<QQModuleType, IQQModule>();
@@ -49,13 +49,13 @@ namespace iQQ.Net.WebQQCore.Im
 
             Account = new QQAccount
             {
-                Username = username ?? string.Empty,
-                Password = password ?? string.Empty
+                Username = string.Empty,
+                Password = string.Empty
             };
             Session = new QQSession();
             Store = new QQStore();
             NotifyListener = notifyListener;
-            _actorDispatcher = actorDispatcher ?? new SimpleActorDispatcher();
+            _actorDispatcher = actorDispatcher ?? new SimpleActorDispatcher();            
             Logger = logger ?? new EmptyQQLogger();
             Logger.Context = this;
             Init();

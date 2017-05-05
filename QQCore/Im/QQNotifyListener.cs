@@ -3,7 +3,11 @@ using iQQ.Net.WebQQCore.Im.Event;
 
 namespace iQQ.Net.WebQQCore.Im
 {
-    // 强类型的委托
+    /// <summary>
+    /// 强类型的委托
+    /// </summary>
+    /// <param name="sender"></param>
+    /// <param name="e"></param>
     public delegate void QQNotifyListener(IQQClient sender, QQNotifyEvent e);
 
     ///// <summary>

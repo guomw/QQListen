@@ -112,20 +112,18 @@ namespace iQQ.Net.WebQQCore.Util
         /// <returns></returns>
         public static string GetQrToken(string qrsigCookieValue)
         {
-            //Type obj = Type.GetTypeFromProgID("ScriptControl");
-            //if (obj == null) return null;
-            //object ScriptControl = Activator.CreateInstance(obj);
-            //obj.InvokeMember("Language", BindingFlags.SetProperty, null, ScriptControl, new object[] { "JavaScript" });
-            //string js = "function GetToken(t) { for (var e = 0, i = 0, n = t.length; n > i; ++i) { e += (e << 5) + t.charCodeAt(i); } return 2147483647 & e; }";
-            //obj.InvokeMember("AddCode", BindingFlags.InvokeMethod, null, ScriptControl, new object[] { js });
-            //return obj.InvokeMember("Run", BindingFlags.InvokeMethod, null, ScriptControl, new object[] { "GetToken('" + qrsigCookieValue + "')" }).ToString();
-
             string js = "function GetToken(t) { for (var e = 0, i = 0, n = t.length; n > i; ++i) { e += (e << 5) + t.charCodeAt(i); } return 2147483647 & e; }";
             string fun = string.Format(@"GetToken('{0}')", qrsigCookieValue);
             string result = ExecuteScript(fun, js);
             return result;
         }
 
+        /// <summary>
+        /// 执行js 代码
+        /// </summary>
+        /// <param name="sExpression"></param>
+        /// <param name="sCode"></param>
+        /// <returns></returns>
         private static string ExecuteScript(string sExpression, string sCode)
         {
             MSScriptControl.ScriptControl scriptControl = new MSScriptControl.ScriptControl();
@@ -143,9 +141,6 @@ namespace iQQ.Net.WebQQCore.Util
             }
             return "";
         }
-
-
-
     }
 
 }

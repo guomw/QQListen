@@ -108,7 +108,7 @@ namespace WebQQ
             //}
 
             // 获取二维码
-            var qq = new WebQQClient("", "", Listener, new SimpleActorDispatcher(), new QQConsoleLogger());
+            var qq = new WebQQClient(Listener, new SimpleActorDispatcher(), new QQConsoleLogger());
             qq.LoginWithQRCode(); // 登录之后自动开始轮训
 
             //var qq = new WebQQClient();
