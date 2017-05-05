@@ -4,3 +4,7 @@
 这个项目是[Smart QQ](http://w.qq.com/)相关协议的.net实现。基于此的一些功能组件。
 
 **移植于[WebQQCore](https://github.com/huoshan12345/WebQQWeChat.git) 在此对作者表示衷心的感谢**  
+
+
+## 开发环境
+1. [Visual Studio 2015](https://www.visualstudio.com/zh-hans/downloads/)  
