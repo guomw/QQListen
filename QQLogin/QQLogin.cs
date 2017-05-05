@@ -65,46 +65,50 @@ namespace QQLogin
         }
         #endregion
 
-
-
         public QQLogin()
         {
             InitializeComponent();
         }
-
-        public WebQQClient qq { get; set; }
 
         /// <summary>
         /// 登录成功处理
         /// </summary>
         public QQNotifyLoginSuccessEventHandler loginSuccessHandler { get; set; }
         /// <summary>
-        /// 接收群活讨论组消息处理
+        /// 群消息处理
         /// </summary>
         public QQNotifyGroupMsgEventHandler GroupMsgHandler { get; set; }
-
+        /// <summary>
+        /// 二维码是否失效
+        /// </summary>
         public bool QrCodeInvalid { get; set; }
 
         private void Form1_Load(object sender, EventArgs e)
         {
             // 获取二维码
-            qq = new WebQQClient((client, notifyEvent) =>
+            QQGlobal.client = new WebQQClient((client, notifyEvent) =>
             {
                 switch (notifyEvent.Type)
                 {
                     case QQNotifyEventType.LoginSuccess:
                         {
-                            loginSuccessHandler?.Invoke(client);
+                            loginSuccessHandler?.Invoke();
                             OpenMainForm();
                             break;
                         }
                     case QQNotifyEventType.GroupMsg:
                         {
                             var revMsg = (QQMsg)notifyEvent.Target;
-                            string msg = revMsg.GetText();
-                            List<string> urls = new List<string>();
-                            urls = UrlUtils.GetUrls(msg);
-                            GroupMsgHandler?.Invoke(client, revMsg);
+                            //判断当前群是否已开启监控
+                            bool isListen = QQGlobal.listenGroups.Exists((g) => { return g.Gid == revMsg.Group.Gid; });
+                            if (isListen)
+                            {
+                                string msg = revMsg.GetText();
+                                List<string> urls = new List<string>();
+                                urls = UrlUtils.GetUrls(msg);
+                                GroupMsgHandler?.Invoke(msg, urls);
+                                MessageBox.Show(msg);
+                            }
                             break;
                         }
                     case QQNotifyEventType.QrcodeReady:
@@ -113,25 +117,35 @@ namespace QQLogin
                             const string path = "verify.png";
                             verify.Save(path);
                             setQrCode(verify);
+                            SetMsg("请使用QQ手机版扫描二维码");
                             break;
                         }
-                    case QQNotifyEventType.LoadBuddySuccess:
+                    case QQNotifyEventType.QrcodeAuth:
                         {
-                            QQGlobal.QQBuddyLoadSuccess = true;
-                            QQGlobal.client = client;
+                            SetMsg("扫描成功，请在手机上确认是否授权登录");
+                            break;
+                        }
+                    case QQNotifyEventType.QrcodeSuccess:
+                        {
+                            SetMsg("二维码验证成功！正在跳转...");
                             break;
                         }
                     case QQNotifyEventType.LoadGroupSuccess:
                         {
                             QQGlobal.QQGroupLoadSuccess = true;
-                            QQGlobal.client = client;
                             break;
                         }
-
                     case QQNotifyEventType.QrcodeInvalid:
                         {
                             QrCodeInvalid = true;
-                            setQrCode(Properties.Resources.QQBG);                            
+                            setQrCode(Properties.Resources.QQBG);
+                            break;
+                        }
+                    case QQNotifyEventType.KickOffline:
+                    case QQNotifyEventType.NetError:
+                        {
+                            //重新登录
+                            client.Relogin(QQStatus.ONLINE);
                             break;
                         }
                     default:
@@ -140,13 +154,15 @@ namespace QQLogin
                         }
                 }
             });
-            qq.LoginWithQRCode(); // 登录之后自动开始轮训
-
+            QQGlobal.client.LoginWithQRCode(); // 登录之后自动开始轮训
         }
 
 
 
-
+        /// <summary>
+        /// 设置二维码
+        /// </summary>
+        /// <param name="verify"></param>
         private void setQrCode(Image verify)
         {
             if (this.picQrcode.InvokeRequired)
@@ -157,13 +173,21 @@ namespace QQLogin
             {
                 picQrcode.SizeMode = PictureBoxSizeMode.StretchImage;
                 picQrcode.Image = verify;
-                if(QrCodeInvalid)
+                if (QrCodeInvalid)
+                {
+                    picQrcode.Cursor = Cursors.Hand;
                     picQQ.Visible = false;
+                }
                 else
+                {
+                    picQrcode.Cursor = Cursors.Default;
                     picQQ.Visible = true;
+                }
             }
         }
-
+        /// <summary>
+        /// 打开主窗口
+        /// </summary>
         private void OpenMainForm()
         {
             if (this.InvokeRequired)
@@ -173,10 +197,28 @@ namespace QQLogin
             else
             {
                 this.Hide();
-                QQGroupList f2 = new QQGroupList(this);
+                QQGroupList f2 = new QQGroupList();
                 f2.Show();
             }
         }
+
+        /// <summary>
+        /// 设置二维码扫描状态
+        /// </summary>
+        /// <param name="text"></param>
+        private void SetMsg(string text)
+        {
+            if (this.lbMsg.InvokeRequired)
+            {
+                this.lbMsg.Invoke(new Action<string>(SetMsg), new object[] { text });
+            }
+            else
+            {
+                lbMsg.Text = text;
+            }
+        }
+
+
         /// <summary>
         /// 刷新二维码
         /// </summary>
@@ -187,14 +229,20 @@ namespace QQLogin
             if (QrCodeInvalid)
             {
                 QrCodeInvalid = false;
-                if (qq != null)
-                    qq.LoginWithQRCode();
+                if (QQGlobal.client != null)
+                    QQGlobal.client.LoginWithQRCode();
                 picQrcode.SizeMode = PictureBoxSizeMode.CenterImage;
                 picQrcode.Image = Properties.Resources.loading;
                 picQQ.Visible = false;
             }
         }
 
+
+        /// <summary>
+        /// 关闭所以线程窗口
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void picClose_Click(object sender, EventArgs e)
         {
             Application.ExitThread();

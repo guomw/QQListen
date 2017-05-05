@@ -34,16 +34,16 @@
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(QQGroupList));
             this.dgvContact = new System.Windows.Forms.DataGridView();
-            this.QQFace = new System.Windows.Forms.DataGridViewImageColumn();
-            this.GroupGid = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.GroupTitle = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.cmsTools = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.toolAddListen = new System.Windows.Forms.ToolStripMenuItem();
+            this.lbTitle = new System.Windows.Forms.Label();
+            this.GroupGid = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.GroupTitle = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.dataGridViewImageColumn1 = new System.Windows.Forms.DataGridViewImageColumn();
             this.picMin = new System.Windows.Forms.PictureBox();
             this.picClose = new System.Windows.Forms.PictureBox();
-            this.lbTitle = new System.Windows.Forms.Label();
+            this.QQFace = new System.Windows.Forms.DataGridViewImageColumn();
             this.picLoading = new System.Windows.Forms.PictureBox();
-            this.dataGridViewImageColumn1 = new System.Windows.Forms.DataGridViewImageColumn();
             ((System.ComponentModel.ISupportInitialize)(this.dgvContact)).BeginInit();
             this.cmsTools.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.picMin)).BeginInit();
@@ -94,13 +94,31 @@
             this.dgvContact.CellMouseEnter += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvContact_CellMouseEnter);
             this.dgvContact.CellMouseLeave += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvContact_CellMouseLeave);
             // 
-            // QQFace
+            // cmsTools
             // 
-            this.QQFace.HeaderText = "QQFace";
-            this.QQFace.Image = global::QQLogin.Properties.Resources.QQ40x40;
-            this.QQFace.Name = "QQFace";
-            this.QQFace.ReadOnly = true;
-            this.QQFace.Width = 50;
+            this.cmsTools.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.toolAddListen});
+            this.cmsTools.Name = "cmsTools";
+            this.cmsTools.Size = new System.Drawing.Size(125, 26);
+            this.cmsTools.Opening += new System.ComponentModel.CancelEventHandler(this.cmsTools_Opening);
+            // 
+            // toolAddListen
+            // 
+            this.toolAddListen.Name = "toolAddListen";
+            this.toolAddListen.Size = new System.Drawing.Size(124, 22);
+            this.toolAddListen.Text = "添加监控";
+            this.toolAddListen.Click += new System.EventHandler(this.toolAddListen_Click);
+            // 
+            // lbTitle
+            // 
+            this.lbTitle.Location = new System.Drawing.Point(6, 2);
+            this.lbTitle.Name = "lbTitle";
+            this.lbTitle.Size = new System.Drawing.Size(228, 23);
+            this.lbTitle.TabIndex = 0;
+            this.lbTitle.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.lbTitle.MouseDown += new System.Windows.Forms.MouseEventHandler(this.WinForm_MouseDown);
+            this.lbTitle.MouseMove += new System.Windows.Forms.MouseEventHandler(this.WinForm_MouseMove);
+            this.lbTitle.MouseUp += new System.Windows.Forms.MouseEventHandler(this.WinForm_MouseUp);
             // 
             // GroupGid
             // 
@@ -117,19 +135,13 @@
             this.GroupTitle.HeaderText = "GroupTitle";
             this.GroupTitle.Name = "GroupTitle";
             // 
-            // cmsTools
+            // dataGridViewImageColumn1
             // 
-            this.cmsTools.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.toolAddListen});
-            this.cmsTools.Name = "cmsTools";
-            this.cmsTools.Size = new System.Drawing.Size(153, 48);
-            this.cmsTools.Opening += new System.ComponentModel.CancelEventHandler(this.cmsTools_Opening);
-            // 
-            // toolAddListen
-            // 
-            this.toolAddListen.Name = "toolAddListen";
-            this.toolAddListen.Size = new System.Drawing.Size(152, 22);
-            this.toolAddListen.Text = "添加监控";
+            this.dataGridViewImageColumn1.HeaderText = "QQFace";
+            this.dataGridViewImageColumn1.Image = global::QQLogin.Properties.Resources.QQ40x40;
+            this.dataGridViewImageColumn1.Name = "dataGridViewImageColumn1";
+            this.dataGridViewImageColumn1.ReadOnly = true;
+            this.dataGridViewImageColumn1.Width = 50;
             // 
             // picMin
             // 
@@ -155,16 +167,13 @@
             this.picClose.TabStop = false;
             this.picClose.Click += new System.EventHandler(this.picClose_Click);
             // 
-            // lbTitle
+            // QQFace
             // 
-            this.lbTitle.Location = new System.Drawing.Point(6, 2);
-            this.lbTitle.Name = "lbTitle";
-            this.lbTitle.Size = new System.Drawing.Size(228, 23);
-            this.lbTitle.TabIndex = 0;
-            this.lbTitle.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.lbTitle.MouseDown += new System.Windows.Forms.MouseEventHandler(this.WinForm_MouseDown);
-            this.lbTitle.MouseMove += new System.Windows.Forms.MouseEventHandler(this.WinForm_MouseMove);
-            this.lbTitle.MouseUp += new System.Windows.Forms.MouseEventHandler(this.WinForm_MouseUp);
+            this.QQFace.HeaderText = "QQFace";
+            this.QQFace.Image = global::QQLogin.Properties.Resources.qqgroup;
+            this.QQFace.Name = "QQFace";
+            this.QQFace.ReadOnly = true;
+            this.QQFace.Width = 50;
             // 
             // picLoading
             // 
@@ -175,14 +184,6 @@
             this.picLoading.SizeMode = System.Windows.Forms.PictureBoxSizeMode.CenterImage;
             this.picLoading.TabIndex = 13;
             this.picLoading.TabStop = false;
-            // 
-            // dataGridViewImageColumn1
-            // 
-            this.dataGridViewImageColumn1.HeaderText = "QQFace";
-            this.dataGridViewImageColumn1.Image = global::QQLogin.Properties.Resources.QQ40x40;
-            this.dataGridViewImageColumn1.Name = "dataGridViewImageColumn1";
-            this.dataGridViewImageColumn1.ReadOnly = true;
-            this.dataGridViewImageColumn1.Width = 50;
             // 
             // QQGroupList
             // 
@@ -215,12 +216,12 @@
         private System.Windows.Forms.Label lbTitle;
         private System.Windows.Forms.PictureBox picClose;
         private System.Windows.Forms.PictureBox picLoading;
-        private System.Windows.Forms.DataGridViewImageColumn QQFace;
-        private System.Windows.Forms.DataGridViewTextBoxColumn GroupGid;
-        private System.Windows.Forms.DataGridViewTextBoxColumn GroupTitle;
         private System.Windows.Forms.DataGridViewImageColumn dataGridViewImageColumn1;
         private System.Windows.Forms.PictureBox picMin;
         private System.Windows.Forms.ContextMenuStrip cmsTools;
         private System.Windows.Forms.ToolStripMenuItem toolAddListen;
+        private System.Windows.Forms.DataGridViewImageColumn QQFace;
+        private System.Windows.Forms.DataGridViewTextBoxColumn GroupGid;
+        private System.Windows.Forms.DataGridViewTextBoxColumn GroupTitle;
     }
 }

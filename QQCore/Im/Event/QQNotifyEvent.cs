@@ -62,6 +62,12 @@ namespace iQQ.Net.WebQQCore.Im.Event
         QrcodeReady,
 
         /// <summary>
+        /// 二维码认证中
+        /// </summary>
+        [Description("二维码认证中")]
+        QrcodeAuth,
+
+        /// <summary>
         /// 二维码失效
         /// </summary>
         [Description("二维码失效")]

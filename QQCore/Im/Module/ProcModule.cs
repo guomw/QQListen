@@ -56,22 +56,25 @@ namespace iQQ.Net.WebQQCore.Im.Module
                     switch (eventArgs.Status)
                     {
                         case QRCodeStatus.QRCODE_OK:
-                        Context.FireNotify(new QQNotifyEvent(QQNotifyEventType.QrcodeSuccess));
-                        DoCheckLoginSig(eventArgs.Msg, future);
-                        break;
+                            Context.FireNotify(new QQNotifyEvent(QQNotifyEventType.QrcodeSuccess));
+                            DoCheckLoginSig(eventArgs.Msg, future);
+                            break;
 
                         case QRCodeStatus.QRCODE_VALID:
+                            Thread.Sleep(3000);
+                            login.CheckQRCode(handler);
+                            break;
                         case QRCodeStatus.QRCODE_AUTH:
-                        Thread.Sleep(3000);
-                        login.CheckQRCode(handler);
-                        break;
+                            Context.FireNotify(new QQNotifyEvent(QQNotifyEventType.QrcodeAuth, eventArgs.Msg));
+                            login.CheckQRCode(handler);
+                            break;
 
                         case QRCodeStatus.QRCODE_INVALID:
-                        Context.FireNotify(new QQNotifyEvent(QQNotifyEventType.QrcodeInvalid, eventArgs.Msg));
-                        break;
+                            Context.FireNotify(new QQNotifyEvent(QQNotifyEventType.QrcodeInvalid, eventArgs.Msg));
+                            break;
 
                         default:
-                        throw new ArgumentOutOfRangeException();
+                            throw new ArgumentOutOfRangeException();
                     }
                 }
                 else if (Event.Type == QQActionEventType.EvtError)
@@ -366,30 +369,30 @@ namespace iQQ.Net.WebQQCore.Im.Module
                     switch (code)
                     {
                         case QQErrorCode.NeedToLogin:
-                        {
-                            DoGetVFWebqq(new ProcActionFuture(null, true));
-                            return;
-                        }
+                            {
+                                DoGetVFWebqq(new ProcActionFuture(null, true));
+                                return;
+                            }
                         case QQErrorCode.InvalidLoginAuth:
-                        {
-                            Relogin();
-                            return;
-                        }
+                            {
+                                Relogin();
+                                return;
+                            }
                         case QQErrorCode.IOError:
                         case QQErrorCode.IOTimeout:
                         case QQErrorCode.InvalidResponse:
-                        {
-                            account.Status = QQStatus.OFFLINE;
-                            //粗线了IO异常，直接报网络错误
-                            Context.FireNotify(new QQNotifyEvent(QQNotifyEventType.NetError, ex));
-                            return;
-                        }
+                            {
+                                account.Status = QQStatus.OFFLINE;
+                                //粗线了IO异常，直接报网络错误
+                                Context.FireNotify(new QQNotifyEvent(QQNotifyEventType.NetError, ex));
+                                return;
+                            }
                         default:
-                        {
-                            Context.Logger.LogInformation("poll msg unexpected error, ignore it ...", ex);
-                            Relogin();
-                            return;
-                        }
+                            {
+                                Context.Logger.LogInformation("poll msg unexpected error, ignore it ...", ex);
+                                Relogin();
+                                return;
+                            }
                     }
                 }
                 else if (Event.Type == QQActionEventType.EvtRetry)

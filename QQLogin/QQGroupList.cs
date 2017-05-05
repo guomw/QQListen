@@ -16,9 +16,6 @@ namespace QQLogin
     {
 
 
-        private Color backColorSelected = Color.FromArgb(248, 248, 248);
-        private Color backColor = Color.FromArgb(255, 255, 255);
-
         /// <summary>
         /// 当前鼠标所在的行索引
         /// </summary>
@@ -67,24 +64,14 @@ namespace QQLogin
 
 
 
-
-
-
-
-
-        private QQLogin loginForm { get; set; }
-
-        public QQGroupList(QQLogin f)
+        public QQGroupList()
         {
             InitializeComponent();
-
-            loginForm = f;
-
         }
 
         private void QQGroupList_Load(object sender, EventArgs e)
         {
-            lbTitle.Text = "WQQ-" + loginForm.qq.Account.QQ.ToString();
+            lbTitle.Text = string.Format("WQQ-{0}",QQGlobal.account.QQ.ToString());
             new System.Threading.Thread(() =>
             {
                 while (!QQGlobal.QQGroupLoadSuccess) { }
@@ -114,21 +101,9 @@ namespace QQLogin
                     dgvContact.Rows.Add();
                     ++i;
                     dgvContact.Rows[i - 1].Cells["GroupTitle"].Value = user.Name;
-                    dgvContact.Rows[i - 1].Cells["GroupGid"].Value = user.Gid;
-                    dgvContact.Rows[i - 1].DefaultCellStyle.SelectionBackColor = Color.FromArgb(236, 232, 231);// ConstConfig.DataGridViewOddRowBackColor;                    
-
-                    //if (i % 2 == 0)
-                    //{
-                    //    dgvContact.Rows[i - 1].DefaultCellStyle.BackColor = Color.FromArgb(248, 248, 248);
-                    //    dgvContact.Rows[i - 1].DefaultCellStyle.SelectionBackColor = Color.FromArgb(248, 248, 248);
-                    //}
-                    //else
-                    //{
-
-                    //}
-
-                    dgvContact.Rows[i - 1].DefaultCellStyle.BackColor = backColor;
-                    dgvContact.Rows[i - 1].DefaultCellStyle.SelectionBackColor = backColor;
+                    dgvContact.Rows[i - 1].Cells["GroupGid"].Value = user.Gid;                    
+                    dgvContact.Rows[i - 1].DefaultCellStyle.BackColor = QQGlobal.backColor;
+                    dgvContact.Rows[i - 1].DefaultCellStyle.SelectionBackColor = QQGlobal.backColor;
                 }
             }
         }
@@ -167,8 +142,8 @@ namespace QQLogin
         private void dgvContact_CellMouseEnter(object sender, DataGridViewCellEventArgs e)
         {
             currentRowIndex = e.RowIndex;
-            dgvContact.Rows[e.RowIndex].DefaultCellStyle.BackColor = backColorSelected;
-            dgvContact.Rows[e.RowIndex].DefaultCellStyle.SelectionBackColor = backColorSelected;
+            dgvContact.Rows[e.RowIndex].DefaultCellStyle.BackColor = QQGlobal.backColorSelected;
+            dgvContact.Rows[e.RowIndex].DefaultCellStyle.SelectionBackColor = QQGlobal.backColorSelected;
         }
 
         /// <summary>
@@ -181,8 +156,8 @@ namespace QQLogin
             DataGridViewCellCollection cells = this.dgvContact.CurrentRow.Cells;
             if (cells[0].RowIndex != e.RowIndex)
             {
-                dgvContact.Rows[e.RowIndex].DefaultCellStyle.BackColor = backColor;
-                dgvContact.Rows[e.RowIndex].DefaultCellStyle.SelectionBackColor = backColor;
+                dgvContact.Rows[e.RowIndex].DefaultCellStyle.BackColor = QQGlobal.backColor;
+                dgvContact.Rows[e.RowIndex].DefaultCellStyle.SelectionBackColor = QQGlobal.backColor;
             }
         }
         /// <summary>
@@ -197,12 +172,19 @@ namespace QQLogin
             {
                 if (row.Cells[0].RowIndex != e.RowIndex)
                 {
-                    row.DefaultCellStyle.BackColor = backColor;
-                    row.DefaultCellStyle.SelectionBackColor = backColor;
+                    row.DefaultCellStyle.BackColor = QQGlobal.backColor;
+                    row.DefaultCellStyle.SelectionBackColor = QQGlobal.backColor;
                 }
             }
         }
 
+
+
+        /// <summary>
+        /// 右键菜单在打开时触发
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void cmsTools_Opening(object sender, CancelEventArgs e)
         {
             DataGridViewCellCollection cells = this.dgvContact.CurrentRow.Cells;
@@ -211,13 +193,31 @@ namespace QQLogin
                 e.Cancel = true;
             else
             {
-
+                long gid = (long)cells["GroupGid"].Value;
+                if (QQGlobal.listenGroups.Exists((g) => { return g.Gid == gid; }))
+                    toolAddListen.Text = "移除监控";
+                else
+                    toolAddListen.Text = "添加监控";
             }
-            
+
         }
 
-        private void cmsTools_Opened(object sender, EventArgs e)
+        private void toolAddListen_Click(object sender, EventArgs e)
         {
+            DataGridViewCellCollection cells = this.dgvContact.CurrentRow.Cells;
+            if (cells == null) return;
+            long gid = (long)cells["GroupGid"].Value;
+            QQGroup group = QQGlobal.store.GetGroupByGin(gid);
+            if (QQGlobal.listenGroups.Exists((g) => { return g.Gid == gid; }))
+            {
+                QQGlobal.listenGroups.Remove(group);
+                cells["GroupTitle"].Value = group.Name;
+            }
+            else
+            {
+                QQGlobal.listenGroups.Add(group);
+                cells["GroupTitle"].Value += "(已监控)";
+            }
 
         }
     }

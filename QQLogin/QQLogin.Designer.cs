@@ -31,10 +31,10 @@
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(QQLogin));
             this.hotPanel1 = new HotTaoControls.HotPanel(this.components);
-            this.label2 = new System.Windows.Forms.Label();
+            this.picQQ = new System.Windows.Forms.PictureBox();
+            this.lbMsg = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
-            this.picQQ = new System.Windows.Forms.PictureBox();
             this.picClose = new System.Windows.Forms.PictureBox();
             this.picQrcode = new System.Windows.Forms.PictureBox();
             this.hotPanel1.SuspendLayout();
@@ -48,7 +48,7 @@
             this.hotPanel1.BackColor = System.Drawing.Color.White;
             this.hotPanel1.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(238)))), ((int)(((byte)(238)))), ((int)(((byte)(238)))));
             this.hotPanel1.Controls.Add(this.picQQ);
-            this.hotPanel1.Controls.Add(this.label2);
+            this.hotPanel1.Controls.Add(this.lbMsg);
             this.hotPanel1.Controls.Add(this.label3);
             this.hotPanel1.Controls.Add(this.label1);
             this.hotPanel1.Controls.Add(this.picClose);
@@ -62,14 +62,26 @@
             this.hotPanel1.MouseMove += new System.Windows.Forms.MouseEventHandler(this.WinForm_MouseMove);
             this.hotPanel1.MouseUp += new System.Windows.Forms.MouseEventHandler(this.WinForm_MouseUp);
             // 
-            // label2
+            // picQQ
             // 
-            this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(49, 302);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(137, 12);
-            this.label2.TabIndex = 3;
-            this.label2.Text = "使用QQ手机版扫描二维码";
+            this.picQQ.BackColor = System.Drawing.Color.Transparent;
+            this.picQQ.Image = global::QQLogin.Properties.Resources.QQ;
+            this.picQQ.Location = new System.Drawing.Point(108, 176);
+            this.picQQ.Name = "picQQ";
+            this.picQQ.Size = new System.Drawing.Size(25, 25);
+            this.picQQ.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.picQQ.TabIndex = 4;
+            this.picQQ.TabStop = false;
+            this.picQQ.Visible = false;
+            // 
+            // lbMsg
+            // 
+            this.lbMsg.Location = new System.Drawing.Point(1, 302);
+            this.lbMsg.Name = "lbMsg";
+            this.lbMsg.Size = new System.Drawing.Size(239, 12);
+            this.lbMsg.TabIndex = 3;
+            this.lbMsg.Text = "使用QQ手机版扫描二维码";
+            this.lbMsg.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // label3
             // 
@@ -91,17 +103,6 @@
             this.label1.Size = new System.Drawing.Size(83, 12);
             this.label1.TabIndex = 2;
             this.label1.Text = "登录 Smart QQ";
-            // 
-            // picQQ
-            // 
-            this.picQQ.Image = global::QQLogin.Properties.Resources.QQ;
-            this.picQQ.Location = new System.Drawing.Point(108, 176);
-            this.picQQ.Name = "picQQ";
-            this.picQQ.Size = new System.Drawing.Size(25, 25);
-            this.picQQ.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
-            this.picQQ.TabIndex = 4;
-            this.picQQ.TabStop = false;
-            this.picQQ.Visible = false;
             // 
             // picClose
             // 
@@ -153,7 +154,7 @@
         private HotTaoControls.HotPanel hotPanel1;
         private System.Windows.Forms.PictureBox picClose;
         private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.Label lbMsg;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.PictureBox picQQ;
     }

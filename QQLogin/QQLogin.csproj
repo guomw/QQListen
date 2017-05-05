@@ -143,6 +143,7 @@
     <Content Include="Resources\HotTaoControls.dll" />
     <Content Include="Resources\icon_close.png" />
     <Content Include="Resources\icon_close1.png" />
+    <Content Include="Resources\qqgroup.jpg" />
     <None Include="Resources\icon_min.png" />
     <Content Include="Resources\loading.gif" />
     <Content Include="Resources\QQ.ico" />
