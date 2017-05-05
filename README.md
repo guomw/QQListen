@@ -1,4 +1,4 @@
-# QQListen
+# QQListen [![.net](https://img.shields.io/badge/color-4.5.1-ff69b4.svg?maxAge=2592000&label=.net%20)](https://www.microsoft.com/net/download)
 基于Smart QQ 对指定的QQ群进行信息采集
 
 这个项目是[Smart QQ](http://w.qq.com/)相关协议的.net实现。基于此的一些功能组件。
