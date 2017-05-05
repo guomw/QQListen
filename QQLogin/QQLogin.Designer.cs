@@ -126,6 +126,9 @@
             this.picQrcode.TabIndex = 0;
             this.picQrcode.TabStop = false;
             this.picQrcode.Click += new System.EventHandler(this.lbRefreshQrCode_Click);
+            this.picQrcode.MouseDown += new System.Windows.Forms.MouseEventHandler(this.WinForm_MouseDown);
+            this.picQrcode.MouseMove += new System.Windows.Forms.MouseEventHandler(this.WinForm_MouseMove);
+            this.picQrcode.MouseUp += new System.Windows.Forms.MouseEventHandler(this.WinForm_MouseUp);
             // 
             // QQLogin
             // 
