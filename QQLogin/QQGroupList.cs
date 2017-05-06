@@ -71,7 +71,7 @@ namespace QQLogin
 
         private void QQGroupList_Load(object sender, EventArgs e)
         {
-            lbTitle.Text = string.Format("WQQ-{0}",QQGlobal.account.QQ.ToString());
+            lbTitle.Text = string.Format("WQQ-{0}", QQGlobal.account.QQ.ToString());
             new System.Threading.Thread(() =>
             {
                 while (!QQGlobal.QQGroupLoadSuccess) { }
@@ -97,11 +97,10 @@ namespace QQLogin
                 picLoading.Visible = false;
                 foreach (var user in contact_all)
                 {
-
                     dgvContact.Rows.Add();
                     ++i;
                     dgvContact.Rows[i - 1].Cells["GroupTitle"].Value = user.Name;
-                    dgvContact.Rows[i - 1].Cells["GroupGid"].Value = user.Gid;                    
+                    dgvContact.Rows[i - 1].Cells["GroupGid"].Value = user.Gid;
                     dgvContact.Rows[i - 1].DefaultCellStyle.BackColor = QQGlobal.backColor;
                     dgvContact.Rows[i - 1].DefaultCellStyle.SelectionBackColor = QQGlobal.backColor;
                 }

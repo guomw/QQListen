@@ -62,6 +62,7 @@ namespace WebQQ
                         const string path = "verify.png";
                         verify.Save(path);
                         client.Logger.LogInformation("请扫描在项目根目录下qrcode.png图片");
+                        Process.Start(path);
                         break;
                     }
 
@@ -77,7 +78,7 @@ namespace WebQQ
                     }
                 default:
                     {
-                        // client.Logger.LogInformation(notifyEvent.Type.GetFullDescription());
+                         client.Logger.LogInformation(notifyEvent.Type.GetFullDescription());
                         break;
                     }
             }

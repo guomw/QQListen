@@ -10,8 +10,12 @@ namespace iQQ.Net.WebQQCore.Util
         {
             const string format = "yyyy-M-d";
             var dateString = jsonobj["year"] + "-" + jsonobj["month"] + "-" + jsonobj["day"];
+            if (dateString.Equals("0-0-0"))
+                dateString = "1970-1-1";
             var dt = DateTime.ParseExact(dateString, format, CultureInfo.CurrentCulture);
             return dt;
+
+
         }
 
         /// <summary>

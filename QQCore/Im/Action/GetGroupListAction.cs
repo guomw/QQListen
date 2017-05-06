@@ -25,7 +25,7 @@ namespace iQQ.Net.WebQQCore.Im.Action
             var ptwebqq = httpService.GetCookie("ptwebqq", QQConstants.URL_GET_USER_CATEGORIES);
             var session = Context.Session;
             var account = Context.Account;
-
+            
             var json = new JObject
             {
                 {"vfwebqq", session.Vfwebqq},
@@ -100,7 +100,7 @@ namespace iQQ.Net.WebQQCore.Im.Action
                     {
                         group.Mask = mask;
                     }
-                }                
+                }
                 NotifyActionEvent(QQActionEventType.EvtOK, store.GetGroupList());
                 //QQ群列表加载完成
                 Context.FireNotify(new QQNotifyEvent(QQNotifyEventType.LoadGroupSuccess));

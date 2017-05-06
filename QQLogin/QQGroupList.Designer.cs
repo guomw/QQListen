@@ -34,15 +34,15 @@
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(QQGroupList));
             this.dgvContact = new System.Windows.Forms.DataGridView();
+            this.QQFace = new System.Windows.Forms.DataGridViewImageColumn();
+            this.GroupGid = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.GroupTitle = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.cmsTools = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.toolAddListen = new System.Windows.Forms.ToolStripMenuItem();
             this.lbTitle = new System.Windows.Forms.Label();
-            this.GroupGid = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.GroupTitle = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.dataGridViewImageColumn1 = new System.Windows.Forms.DataGridViewImageColumn();
             this.picMin = new System.Windows.Forms.PictureBox();
             this.picClose = new System.Windows.Forms.PictureBox();
-            this.QQFace = new System.Windows.Forms.DataGridViewImageColumn();
             this.picLoading = new System.Windows.Forms.PictureBox();
             ((System.ComponentModel.ISupportInitialize)(this.dgvContact)).BeginInit();
             this.cmsTools.SuspendLayout();
@@ -88,11 +88,34 @@
             this.dgvContact.RowsDefaultCellStyle = dataGridViewCellStyle3;
             this.dgvContact.RowTemplate.Height = 60;
             this.dgvContact.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.dgvContact.Size = new System.Drawing.Size(310, 554);
+            this.dgvContact.Size = new System.Drawing.Size(283, 554);
             this.dgvContact.TabIndex = 12;
             this.dgvContact.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvContact_CellClick);
             this.dgvContact.CellMouseEnter += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvContact_CellMouseEnter);
             this.dgvContact.CellMouseLeave += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvContact_CellMouseLeave);
+            // 
+            // QQFace
+            // 
+            this.QQFace.HeaderText = "QQFace";
+            this.QQFace.Image = global::QQLogin.Properties.Resources.qqgroup;
+            this.QQFace.Name = "QQFace";
+            this.QQFace.ReadOnly = true;
+            this.QQFace.Width = 50;
+            // 
+            // GroupGid
+            // 
+            this.GroupGid.HeaderText = "GroupGid";
+            this.GroupGid.Name = "GroupGid";
+            this.GroupGid.ReadOnly = true;
+            this.GroupGid.Visible = false;
+            // 
+            // GroupTitle
+            // 
+            this.GroupTitle.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            dataGridViewCellStyle1.Padding = new System.Windows.Forms.Padding(10, 0, 0, 0);
+            this.GroupTitle.DefaultCellStyle = dataGridViewCellStyle1;
+            this.GroupTitle.HeaderText = "GroupTitle";
+            this.GroupTitle.Name = "GroupTitle";
             // 
             // cmsTools
             // 
@@ -119,21 +142,6 @@
             this.lbTitle.MouseDown += new System.Windows.Forms.MouseEventHandler(this.WinForm_MouseDown);
             this.lbTitle.MouseMove += new System.Windows.Forms.MouseEventHandler(this.WinForm_MouseMove);
             this.lbTitle.MouseUp += new System.Windows.Forms.MouseEventHandler(this.WinForm_MouseUp);
-            // 
-            // GroupGid
-            // 
-            this.GroupGid.HeaderText = "GroupGid";
-            this.GroupGid.Name = "GroupGid";
-            this.GroupGid.ReadOnly = true;
-            this.GroupGid.Visible = false;
-            // 
-            // GroupTitle
-            // 
-            this.GroupTitle.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-            dataGridViewCellStyle1.Padding = new System.Windows.Forms.Padding(10, 0, 0, 0);
-            this.GroupTitle.DefaultCellStyle = dataGridViewCellStyle1;
-            this.GroupTitle.HeaderText = "GroupTitle";
-            this.GroupTitle.Name = "GroupTitle";
             // 
             // dataGridViewImageColumn1
             // 
@@ -166,14 +174,6 @@
             this.picClose.TabIndex = 2;
             this.picClose.TabStop = false;
             this.picClose.Click += new System.EventHandler(this.picClose_Click);
-            // 
-            // QQFace
-            // 
-            this.QQFace.HeaderText = "QQFace";
-            this.QQFace.Image = global::QQLogin.Properties.Resources.qqgroup;
-            this.QQFace.Name = "QQFace";
-            this.QQFace.ReadOnly = true;
-            this.QQFace.Width = 50;
             // 
             // picLoading
             // 

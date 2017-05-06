@@ -106,8 +106,7 @@ namespace QQLogin
                                 string msg = revMsg.GetText();
                                 List<string> urls = new List<string>();
                                 urls = UrlUtils.GetUrls(msg);
-                                GroupMsgHandler?.Invoke(msg, urls);
-                                MessageBox.Show(msg);
+                                GroupMsgHandler?.Invoke(msg, urls);                                
                             }
                             break;
                         }
@@ -150,6 +149,7 @@ namespace QQLogin
                         }
                     default:
                         {
+                            //MessageBox.Show(notifyEvent.Target.ToString());
                             break;
                         }
                 }
