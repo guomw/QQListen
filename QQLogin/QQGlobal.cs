@@ -25,13 +25,18 @@ namespace QQLogin
     /// QQ登录成功通知
     /// </summary>
     public delegate void QQNotifyLoginSuccessEventHandler();
-
+    
     /// <summary>
     /// QQ群消息通知
     /// </summary>
     /// <param name="msgContent">消息内容</param>
     /// <param name="urls">消息包含的url</param>
     public delegate void QQNotifyGroupMsgEventHandler(string msgContent, List<string> urls);
+
+    /// <summary>
+    /// 关闭QQ
+    /// </summary>
+    public delegate void CloseQQEventHandler();
 
 
 
@@ -40,6 +45,11 @@ namespace QQLogin
     /// </summary>
     public static class QQGlobal
     {
+        /// <summary>
+        /// QQ登录对象
+        /// </summary>
+        public static QQLogin loginForm { get; set; }
+
         /// <summary>
         /// 群加载完成
         /// </summary>
@@ -69,10 +79,6 @@ namespace QQLogin
         /// </summary>
         public static List<QQGroup> listenGroups { get; set; } = new List<QQGroup>();
 
-        /// <summary>
-        /// 登录窗口对象
-        /// </summary>
-        public static QQLogin loginForm { get; set; }
 
         /// <summary>
         /// 获取自己账户实体

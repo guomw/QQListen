@@ -199,7 +199,6 @@
             this.Name = "QQGroupList";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "QQ群列表";
-            this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.QQGroupList_FormClosed);
             this.Load += new System.EventHandler(this.QQGroupList_Load);
             ((System.ComponentModel.ISupportInitialize)(this.dgvContact)).EndInit();
             this.cmsTools.ResumeLayout(false);

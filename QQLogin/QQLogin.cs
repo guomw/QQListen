@@ -73,15 +73,26 @@ namespace QQLogin
         /// <summary>
         /// 登录成功处理
         /// </summary>
-        public QQNotifyLoginSuccessEventHandler loginSuccessHandler { get; set; }
+        public event QQNotifyLoginSuccessEventHandler loginSuccessHandler;
         /// <summary>
         /// 群消息处理
         /// </summary>
-        public QQNotifyGroupMsgEventHandler GroupMsgHandler { get; set; }
+        public event QQNotifyGroupMsgEventHandler GroupMsgHandler;
+
+        /// <summary>
+        /// 关闭QQ监控
+        /// </summary>
+        public event CloseQQEventHandler CloseQQHandler;
+
         /// <summary>
         /// 二维码是否失效
         /// </summary>
         public bool QrCodeInvalid { get; set; }
+
+        /// <summary>
+        /// QQ群列表
+        /// </summary>
+        public QQGroupList groupForm { get; set; }
 
         private void Form1_Load(object sender, EventArgs e)
         {
@@ -106,15 +117,13 @@ namespace QQLogin
                                 string msg = revMsg.GetText();
                                 List<string> urls = new List<string>();
                                 urls = UrlUtils.GetUrls(msg);
-                                GroupMsgHandler?.Invoke(msg, urls);                                
+                                GroupMsgHandler?.Invoke(msg, urls);
                             }
                             break;
                         }
                     case QQNotifyEventType.QrcodeReady:
                         {
                             var verify = (Image)notifyEvent.Target;
-                            const string path = "verify.png";
-                            verify.Save(path);
                             setQrCode(verify);
                             SetMsg("请使用QQ手机版扫描二维码");
                             break;
@@ -197,8 +206,8 @@ namespace QQLogin
             else
             {
                 this.Hide();
-                QQGroupList f2 = new QQGroupList();
-                f2.Show();
+                groupForm = new QQGroupList(this);
+                groupForm.Show();
             }
         }
 
@@ -245,8 +254,43 @@ namespace QQLogin
         /// <param name="e"></param>
         private void picClose_Click(object sender, EventArgs e)
         {
-            Application.ExitThread();
-            Process.GetCurrentProcess().Kill();
+
+            if (IsCloseHandler)
+                closeHandler();
+            else
+            {
+                Application.ExitThread();
+                Process.GetCurrentProcess().Kill();
+            }
         }
+        /// <summary>
+        /// 关闭窗体
+        /// </summary>
+        public void CloseEx()
+        {
+            if (groupForm != null)
+            {
+                groupForm.Close();
+                this.Close();                
+            }
+        }
+        /// <summary>
+        /// 判断是否定义了关闭处理事件
+        /// </summary>
+        public bool IsCloseHandler
+        {
+            get
+            {
+                return CloseQQHandler != null;
+            }
+        }
+        /// <summary>
+        /// 执行自定义的关闭处理事件
+        /// </summary>
+        public void closeHandler()
+        {
+            CloseQQHandler?.Invoke();
+        }
+
     }
 }

@@ -14,7 +14,7 @@ namespace QQLogin
 {
     public partial class QQGroupList : FormEx
     {
-
+        //public QQLogin loginForm { get; set; }
 
         /// <summary>
         /// 当前鼠标所在的行索引
@@ -64,9 +64,10 @@ namespace QQLogin
 
 
 
-        public QQGroupList()
+        public QQGroupList(QQLogin qq)
         {
             InitializeComponent();
+            //loginForm = qq;
         }
 
         private void QQGroupList_Load(object sender, EventArgs e)
@@ -108,12 +109,6 @@ namespace QQLogin
         }
 
 
-
-        private void QQGroupList_FormClosed(object sender, FormClosedEventArgs e)
-        {
-            Application.ExitThread();
-            Process.GetCurrentProcess().Kill();
-        }
         /// <summary>
         /// 关闭
         /// </summary>
@@ -121,7 +116,13 @@ namespace QQLogin
         /// <param name="e"></param>
         private void picClose_Click(object sender, EventArgs e)
         {
-            this.Close();
+            if (QQGlobal.loginForm.IsCloseHandler)
+                QQGlobal.loginForm.closeHandler();
+            else
+            {
+                Application.ExitThread();
+                Process.GetCurrentProcess().Kill();
+            }
         }
         /// <summary>
         /// 最小化
