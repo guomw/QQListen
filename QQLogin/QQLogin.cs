@@ -22,8 +22,9 @@ using System.Windows.Forms;
 
 namespace QQLogin
 {
-    public partial class QQLogin : Form
+    public partial class QQLogin : FormEx
     {
+
         #region 移动窗口
         /*
          * 首先将窗体的边框样式修改为None，让窗体没有标题栏
@@ -65,10 +66,15 @@ namespace QQLogin
         }
         #endregion
 
+
         public QQLogin()
         {
             InitializeComponent();
         }
+        /// <summary>
+        /// 是否显示QQ群列表，只在第三方应用调用，由调用方自行设置
+        /// </summary>
+        public bool isShowQQGroupList { get; set; } = true;
 
         /// <summary>
         /// 登录成功处理
@@ -85,6 +91,11 @@ namespace QQLogin
         public event CloseQQEventHandler CloseQQHandler;
 
         /// <summary>
+        /// qq群加载完成
+        /// </summary>
+        public event QQGroupLoadSuccessEventHandler GroupLoadSuccessHandler;
+
+        /// <summary>
         /// 二维码是否失效
         /// </summary>
         public bool QrCodeInvalid { get; set; }
@@ -94,8 +105,14 @@ namespace QQLogin
         /// </summary>
         public QQGroupList groupForm { get; set; }
 
+        /// <summary>
+        /// 是否登录成功
+        /// </summary>
+        private bool isLoginSuccess { get; set; }
+
         private void Form1_Load(object sender, EventArgs e)
         {
+            QQGlobal.loginForm = this;
             // 获取二维码
             QQGlobal.client = new WebQQClient((client, notifyEvent) =>
             {
@@ -103,8 +120,14 @@ namespace QQLogin
                 {
                     case QQNotifyEventType.LoginSuccess:
                         {
+                            isLoginSuccess = true;
                             loginSuccessHandler?.Invoke();
                             OpenMainForm();
+                            break;
+                        }
+                    case QQNotifyEventType.ReloginSuccess:
+                        {
+                            isLoginSuccess = true;      
                             break;
                         }
                     case QQNotifyEventType.GroupMsg:
@@ -117,7 +140,7 @@ namespace QQLogin
                                 string msg = revMsg.GetText();
                                 List<string> urls = new List<string>();
                                 urls = UrlUtils.GetUrls(msg);
-                                GroupMsgHandler?.Invoke(msg, urls);
+                                GroupMsgHandler?.Invoke(revMsg.Id, revMsg.Group.Name, msg, urls);
                             }
                             break;
                         }
@@ -140,6 +163,7 @@ namespace QQLogin
                         }
                     case QQNotifyEventType.LoadGroupSuccess:
                         {
+                            GroupLoadSuccessHandler?.Invoke();
                             QQGlobal.QQGroupLoadSuccess = true;
                             break;
                         }
@@ -150,20 +174,43 @@ namespace QQLogin
                             break;
                         }
                     case QQNotifyEventType.KickOffline:
-                    case QQNotifyEventType.NetError:
                         {
+                            isLoginSuccess = false;
                             //重新登录
-                            client.Relogin(QQStatus.ONLINE);
+                            client.Relogin(QQStatus.ONLINE, (s, c) =>
+                            {
+                                if (c.Type == QQActionEventType.EvtOK)
+                                {
+                                    isLoginSuccess = true;
+                                }
+                            });
                             break;
                         }
                     default:
                         {
-                            //MessageBox.Show(notifyEvent.Target.ToString());
                             break;
                         }
                 }
             });
             QQGlobal.client.LoginWithQRCode(); // 登录之后自动开始轮训
+
+            System.Windows.Forms.Timer pollTime = new System.Windows.Forms.Timer();
+            pollTime.Interval = 10000;
+            pollTime.Tick += PollTime_Tick;
+            pollTime.Start();
+        }
+
+        /// <summary>
+        /// 定时发送心率包，已保证长久在线
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void PollTime_Tick(object sender, EventArgs e)
+        {
+            if (isLoginSuccess)
+            {
+                QQGlobal.client.BeginPollMsg();
+            }
         }
 
 
@@ -206,8 +253,11 @@ namespace QQLogin
             else
             {
                 this.Hide();
-                groupForm = new QQGroupList(this);
-                groupForm.Show();
+                if (isShowQQGroupList)
+                {
+                    groupForm = new QQGroupList(this);
+                    groupForm.Show();
+                }
             }
         }
 
@@ -271,7 +321,7 @@ namespace QQLogin
             if (groupForm != null)
             {
                 groupForm.Close();
-                this.Close();                
+                this.Close();
             }
         }
         /// <summary>

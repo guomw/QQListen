@@ -293,7 +293,7 @@ namespace iQQ.Net.WebQQCore.Im.Module
                 }
                 else
                 {
-                    listener(this, Event);
+                    listener?.Invoke(this, Event);
                 }
             });
             return future;

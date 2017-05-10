@@ -29,13 +29,18 @@ namespace iQQ.Net.WebQQCore.Im.Action
         {
             var session = Context.Session;
             var req = CreateHttpRequest(HttpConstants.Get, QQConstants.URL_GET_USER_FACE);
-            req.AddGetValue("uin", _user.Uin);
-            req.AddGetValue("vfwebqq", session.Vfwebqq);
+            req.AddGetValue("b", "qq");
+            req.AddGetValue("nk", _user.QQ);
+            req.AddGetValue("s", 100);
             req.AddGetValue("t", DateTime.Now.CurrentTimeMillis());
-            req.AddGetValue("cache", 0); // ??
-            req.AddGetValue("type", 1); // ??
-            req.AddGetValue("fid", 0); // ??
-            req.AddHeader("Referer", QQConstants.REFFER);
+
+            //req.AddGetValue("uin", _user.Uin);
+            //req.AddGetValue("vfwebqq", session.Vfwebqq);
+            //req.AddGetValue("t", DateTime.Now.CurrentTimeMillis());
+            //req.AddGetValue("cache", 0); // ??
+            //req.AddGetValue("type", 1); // ??
+            //req.AddGetValue("fid", 0); // ??
+            req.AddHeader("Referer", "http://w.qq.com");
             req.ResultType = ResponseResultType.Stream;
             return req;
         }

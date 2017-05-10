@@ -30,7 +30,7 @@ namespace iQQ.Net.WebQQCore.Im
         /// <param name="notifyListener">监听器</param>
         /// <param name="actorDispatcher">线程执行器</param>
         /// <param name="logger">日志记录器</param>
-        public WebQQClient( QQNotifyListener notifyListener = null, 
+        public WebQQClient(QQNotifyListener notifyListener = null,
             IQQActorDispatcher actorDispatcher = null, IQQLogger logger = null)
         {
             _modules = new Dictionary<QQModuleType, IQQModule>();
@@ -55,7 +55,7 @@ namespace iQQ.Net.WebQQCore.Im
             Session = new QQSession();
             Store = new QQStore();
             NotifyListener = notifyListener;
-            _actorDispatcher = actorDispatcher ?? new SimpleActorDispatcher();            
+            _actorDispatcher = actorDispatcher ?? new SimpleActorDispatcher();
             Logger = logger ?? new EmptyQQLogger();
             Logger.Context = this;
             Init();
@@ -232,9 +232,9 @@ namespace iQQ.Net.WebQQCore.Im
         {
             if (Session.State == QQSessionState.Online)
             {
-                throw new Exception("client is aready online !!!");
+                //throw new Exception("client is aready online !!!");
+                return null;
             }
-
             Account.Status = status;
             Session.State = QQSessionState.Logining;
             var procModule = GetModule<ProcModule>(QQModuleType.PROC);
@@ -272,17 +272,23 @@ namespace iQQ.Net.WebQQCore.Im
         /// </summary>
         public void BeginPollMsg()
         {
-            if (Session.State == QQSessionState.Offline)
+            try
             {
-                throw new Exception("client is aready offline !!!");
+                if (Session.State == QQSessionState.Offline)
+                {
+                    //throw new Exception("client is aready offline !!!");
+                    NotifyListener?.Invoke(this, new QQNotifyEvent(QQNotifyEventType.KickOffline));
+                }
+                else
+                {
+                    var procModule = GetModule<ProcModule>(QQModuleType.PROC);
+                    procModule.DoPollMsg();
+                }
             }
-
-            var procModule = GetModule<ProcModule>(QQModuleType.PROC);
-            procModule.DoPollMsg();
-
-            // 轮询邮件
-            //             EmailModule emailModule = GetModule<EmailModule>(QQModuleType.EMAIL);
-            //             emailModule.DoPoll();
+            catch (Exception ex)
+            {
+                Logger.LogError($"FireNotify Error!! {ex}", ex);
+            }
         }
 
         /// <summary>

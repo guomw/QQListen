@@ -13,6 +13,7 @@ namespace QQLogin
 {
     public partial class FormEx : Form
     {
+        //protected NLog.Logger log = NLog.LogManager.GetCurrentClassLogger();
         public FormEx()
         {
             InitializeComponent();

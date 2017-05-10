@@ -24,7 +24,7 @@
         public const string URL_GET_IMAGE = "https://ssl.captcha.qq.com/getimage";
         public const string URL_POLL_MSG = "http://d1.web2.qq.com/channel/poll2";
         public const string URL_GET_USER_CATEGORIES = "http://s.web2.qq.com/api/get_user_friends2";
-        public const string URL_GET_USER_FACE = "http://face1.qun.qq.com/cgi/svr/face/getface";
+        public const string URL_GET_USER_FACE = "http://q.qlogo.cn/g";//;   //http://face1.qun.qq.com/cgi/svr/face/getface
         public const string URL_GET_GROUP_NAME_LIST = "http://s.web2.qq.com/api/get_group_name_list_mask2";
         public const string URL_GET_USER_ACCOUNT = "http://s.web2.qq.com/api/get_friend_uin2";
         public const string URL_GET_USER_SIGN = "http://s.web2.qq.com/api/get_single_long_nick2";

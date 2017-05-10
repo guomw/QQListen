@@ -88,99 +88,107 @@ namespace iQQ.Net.WebQQCore.Im.Action
             // 消息下载来的列表中是倒过来的，那我直接倒过来取，编位回来
             for (var i = results.Count - 1; i >= 0; i--)
             {
-                var poll = results[i].ToObject<JObject>();
-                var pollType = poll["poll_type"].ToString();
-                var pollData = poll["value"].ToObject<JObject>();
-
-                switch (pollType)
+                try
                 {
-                    case "input_notify":
-                    {
-                        var fromUin = pollData["from_uin"].ToObject<long>();
-                        var qqBuddy = Context.Store.GetBuddyByUin(fromUin);
-                        notifyEvents.Add(new QQNotifyEvent(QQNotifyEventType.BuddyInput, qqBuddy));
-                        break;
-                    }
-                    case "message":
-                    {
-                        // 好友消息
-                        notifyEvents.Add(ProcessBuddyMsg(pollData));
-                        break;
-                    }
-                    case "group_message":
-                    {
-                        // 群消息
-                        notifyEvents.Add(ProcessGroupMsg(pollData));
-                        break;
-                    }
-                    case "discu_message":
-                    {
-                        // 讨论组消息
-                        notifyEvents.Add(ProcessDiscuzMsg(pollData));
-                        break;
-                    }
-                    case "sess_message":
-                    {
-                        // 临时会话消息
-                        notifyEvents.Add(ProcessSessionMsg(pollData));
-                        break;
-                    }
-                    case "shake_message":
-                    {
-                        // 窗口震动
-                        var fromUin = pollData["from_uin"].ToObject<long>();
-                        var user = Context.Store.GetBuddyByUin(fromUin);
-                        notifyEvents.Add(new QQNotifyEvent(QQNotifyEventType.ShakeWindow, user));
-                        break;
-                    }
-                    case "kick_message":
-                    {
-                        // 被踢下线
-                        Context.Account.Status = QQStatus.OFFLINE;
-                        Context.Session.State = QQSessionState.Kicked;
-                        notifyEvents.Add(new QQNotifyEvent(QQNotifyEventType.KickOffline, pollData["reason"].ToString()));
-                        break;
-                    }
-                    case "buddies_status_change":
-                    {
-                        // 群消息
-                        notifyEvents.Add(ProcessBuddyStatusChange(pollData));
-                        break;
-                    }
-                    case "system_message": //好友添加
-                    {
-                        var processSystemMessage = ProcessSystemMsg(pollData);
-                        if (processSystemMessage != null)
-                        {
-                            notifyEvents.Add(processSystemMessage);
-                        }
-                        break;
-                    }
-                    case "group_web_message": //发布了共享文件
-                    {
-                        var processSystemMessage = ProcessGroupWebMsg(pollData);
-                        if (processSystemMessage != null)
-                        {
-                            notifyEvents.Add(processSystemMessage);
+                    var poll = results[i].ToObject<JObject>();
+                    var pollType = poll["poll_type"].ToString();
+                    var pollData = poll["value"].ToObject<JObject>();
 
-                        }
-                        break;
-                    }
-                    case "sys_g_msg": //被踢出了群
+                    switch (pollType)
                     {
-                        var processSystemMessage = ProcessSystemGroupMsg(pollData);
-                        if (processSystemMessage != null)
-                        {
-                            notifyEvents.Add(processSystemMessage);
-                        }
-                        break;
+                        case "input_notify":
+                            {
+                                var fromUin = pollData["from_uin"].ToObject<long>();
+                                var qqBuddy = Context.Store.GetBuddyByUin(fromUin);
+                                notifyEvents.Add(new QQNotifyEvent(QQNotifyEventType.BuddyInput, qqBuddy));
+                                break;
+                            }
+                        case "message":
+                            {
+                                // 好友消息
+                                notifyEvents.Add(ProcessBuddyMsg(pollData));
+                                break;
+                            }
+                        case "group_message":
+                            {
+                                // 群消息
+                                notifyEvents.Add(ProcessGroupMsg(pollData));
+                                break;
+                            }
+                        case "discu_message":
+                            {
+                                // 讨论组消息
+                                notifyEvents.Add(ProcessDiscuzMsg(pollData));
+                                break;
+                            }
+                        case "sess_message":
+                            {
+                                // 临时会话消息
+                                notifyEvents.Add(ProcessSessionMsg(pollData));
+                                break;
+                            }
+                        case "shake_message":
+                            {
+                                // 窗口震动
+                                var fromUin = pollData["from_uin"].ToObject<long>();
+                                var user = Context.Store.GetBuddyByUin(fromUin);
+                                notifyEvents.Add(new QQNotifyEvent(QQNotifyEventType.ShakeWindow, user));
+                                break;
+                            }
+                        case "kick_message":
+                            {
+                                // 被踢下线
+                                Context.Account.Status = QQStatus.OFFLINE;
+                                Context.Session.State = QQSessionState.Kicked;
+                                notifyEvents.Add(new QQNotifyEvent(QQNotifyEventType.KickOffline, pollData["reason"].ToString()));
+                                break;
+                            }
+                        case "buddies_status_change":
+                            {
+                                // 群消息
+                                notifyEvents.Add(ProcessBuddyStatusChange(pollData));
+                                break;
+                            }
+                        case "system_message": //好友添加
+                            {
+                                var processSystemMessage = ProcessSystemMsg(pollData);
+                                if (processSystemMessage != null)
+                                {
+                                    notifyEvents.Add(processSystemMessage);
+                                }
+                                break;
+                            }
+                        case "group_web_message": //发布了共享文件
+                            {
+                                var processSystemMessage = ProcessGroupWebMsg(pollData);
+                                if (processSystemMessage != null)
+                                {
+                                    notifyEvents.Add(processSystemMessage);
+
+                                }
+                                break;
+                            }
+                        case "sys_g_msg": //被踢出了群
+                            {
+                                var processSystemMessage = ProcessSystemGroupMsg(pollData);
+                                if (processSystemMessage != null)
+                                {
+                                    notifyEvents.Add(processSystemMessage);
+                                }
+                                break;
+                            }
+                        default:
+                            {
+                                var ex = new QQException(QQErrorCode.UnknownError, "unknown pollType: " + pollType);
+                                NotifyActionEvent(QQActionEventType.EvtError, ex);
+                                break;
+                            }
                     }
-                    default:
-                    {
-                        var ex = new QQException(QQErrorCode.UnknownError, "unknown pollType: " + pollType);
-                        NotifyActionEvent(QQActionEventType.EvtError, ex);
-                        break;
-                    }
+                }
+                catch (Exception)
+                {
+                    var ex = new QQException(QQErrorCode.JsonError);
+                    NotifyActionEvent(QQActionEventType.EvtError, ex);
                 }
             }
             return notifyEvents;

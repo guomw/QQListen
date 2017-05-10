@@ -25,18 +25,56 @@ namespace QQLogin
     /// QQ登录成功通知
     /// </summary>
     public delegate void QQNotifyLoginSuccessEventHandler();
-    
+
     /// <summary>
     /// QQ群消息通知
-    /// </summary>
+    /// </summary>    
+    /// <param name="msgCode">消息Code</param>
+    /// <param name="msgGroupName">群标题</param>
     /// <param name="msgContent">消息内容</param>
     /// <param name="urls">消息包含的url</param>
-    public delegate void QQNotifyGroupMsgEventHandler(string msgContent, List<string> urls);
+    public delegate void QQNotifyGroupMsgEventHandler(long msgCode, string msgGroupName, string msgContent, List<string> urls);
 
     /// <summary>
     /// 关闭QQ
     /// </summary>
     public delegate void CloseQQEventHandler();
+    /// <summary>
+    /// QQ群加载完成
+    /// </summary>
+    public delegate void QQGroupLoadSuccessEventHandler();
+
+
+
+    /// <summary>
+    /// 根据商品地址，生成商品信息
+    /// </summary>
+    /// <param name="msgCode">商品CODE</param>
+    /// <param name="urls">链接</param>
+    /// <param name="isAutoSend">是否自动跟发</param>    
+    /// <param name="callback">回调</param>    
+    public delegate void BuildGoodsEventHandler(long msgCode,List<string> urls, bool isAutoSend,Action<MessageCallBackType,int,int> callback);
+
+    /// <summary>
+    /// 批量保存到本地商品库
+    /// </summary>
+    /// <param name="urls"></param>
+    public delegate void BatchSaveEventHandler(List<Dictionary<string, string>> urls);
+
+
+
+    /// <summary>
+    /// 消息处理回调类型
+    /// </summary>
+    public enum MessageCallBackType
+    {
+        正在准备,
+        开始转链,
+        转链完成,
+        开始创建计划,
+        完成
+    }
+
 
 
 
@@ -100,5 +138,55 @@ namespace QQLogin
         /// </summary>
         public static readonly Color backColor = Color.FromArgb(255, 255, 255);
 
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public static void Reset()
+        {
+            listenGroups.Clear();
+            client = null;
+            QQGroupLoadSuccess = false;
+            QQBuddyLoadSuccess = false;
+            loginForm = null;
+        }
+
     }
+
+
+
+
+    /// <summary>
+    /// 采集的消息实体
+    /// </summary>
+    public class QQGroupMessageModel
+    {
+
+        public long Code { get; set; }
+
+        /// <summary>
+        /// 消息来源QQ群
+        /// </summary>
+        public string GroupName { get; set; }
+        /// <summary>
+        /// 消息完整内容
+        /// </summary>
+        public string MessageContent { get; set; }
+
+        /// <summary>
+        /// 链接1
+        /// </summary>
+        public string MessageUrl1 { get; set; }
+
+        /// <summary>
+        /// 链接2
+        /// </summary>
+        public string MessageUrl2 { get; set; }
+
+        /// <summary>
+        /// 消息状态0未处理   1已处理
+        /// </summary>
+        public int MessageStatus { get; set; } = 0;
+    }
+
 }

@@ -28,9 +28,8 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(QQLogin));
-            this.hotPanel1 = new HotTaoControls.HotPanel(this.components);
+            this.hotPanel1 = new HotTaoControls.HotPanel();
             this.picQQ = new System.Windows.Forms.PictureBox();
             this.lbMsg = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
@@ -65,7 +64,7 @@
             // picQQ
             // 
             this.picQQ.BackColor = System.Drawing.Color.Transparent;
-            this.picQQ.Image = global::QQLogin.Properties.Resources.QQ;
+            this.picQQ.Image = global::QQLogin.Properties.Resources.qq50x50;
             this.picQQ.Location = new System.Drawing.Point(108, 176);
             this.picQQ.Name = "picQQ";
             this.picQQ.Size = new System.Drawing.Size(25, 25);

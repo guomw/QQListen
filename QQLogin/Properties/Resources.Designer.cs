@@ -113,6 +113,16 @@ namespace QQLogin.Properties {
         /// <summary>
         ///   查找 System.Drawing.Bitmap 类型的本地化资源。
         /// </summary>
+        internal static System.Drawing.Bitmap qq50x50 {
+            get {
+                object obj = ResourceManager.GetObject("qq50x50", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   查找 System.Drawing.Bitmap 类型的本地化资源。
+        /// </summary>
         internal static System.Drawing.Bitmap QQBG {
             get {
                 object obj = ResourceManager.GetObject("QQBG", resourceCulture);
